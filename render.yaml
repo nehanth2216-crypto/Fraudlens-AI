@@ -2,20 +2,26 @@ services:
   - type: web
     name: fraudlens-ai-backend
     runtime: python
+    # Render will cd into this directory before running build/start commands
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: python scripts/seed_data.py; python scripts/seed_v2.py; uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r requirements.txt && python scripts/seed_data.py && python scripts/seed_v2.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
+      # Database — SQLite by default (zero-config). For PostgreSQL, override this.
       - key: DATABASE_URL
         value: sqlite:///./fraudlens.db
+      # JWT Secret — CHANGE THIS. Generate with: python -c "import secrets; print(secrets.token_hex(32))"
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_ALGORITHM
         value: HS256
       - key: JWT_EXPIRY_MINUTES
-        value: 480
+        value: "480"
+      # Set this to your actual Vercel frontend URL after deploying the frontend
       - key: FRONTEND_URL
         value: https://fraudlens-ai.vercel.app
+      # ML Risk Engine Weights
       - key: RISK_WEIGHT_ML
         value: "0.35"
       - key: RISK_WEIGHT_ANOMALY
@@ -24,6 +30,7 @@ services:
         value: "0.25"
       - key: RISK_WEIGHT_RULES
         value: "0.15"
+      # Risk Thresholds
       - key: RISK_THRESHOLD_LOW
         value: "30"
       - key: RISK_THRESHOLD_MEDIUM
@@ -32,3 +39,5 @@ services:
         value: "80"
       - key: LOG_LEVEL
         value: INFO
+      - key: DB_ECHO
+        value: "false"

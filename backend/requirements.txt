@@ -1,10 +1,12 @@
 # ============================================
 # FraudLens AI — Backend Dependencies
+# Production-pinned for Render deployment
+# Actual versions verified on Python 3.11
 # ============================================
 
 # Web Framework
-fastapi==0.115.0
-uvicorn[standard]==0.30.0
+fastapi==0.115.12
+uvicorn[standard]==0.30.6
 python-multipart==0.0.9
 
 # Database
@@ -18,37 +20,34 @@ passlib[bcrypt]==1.7.4
 bcrypt==4.2.0
 
 # Validation
-pydantic==2.9.0
-pydantic-settings==2.5.0
+pydantic==2.9.2
+pydantic-settings==2.5.2
 email-validator==2.2.0
 
 # ML / Data Science
 scikit-learn==1.5.2
 xgboost==2.1.1
-pandas==2.2.2
+pandas==2.2.3
 numpy==1.26.4
 joblib==1.4.2
 shap==0.46.0
+scipy==1.14.1
 
-# Redis
-redis==5.1.0
-
-# WebSocket
-websockets==13.0
-
-# Utilities
-python-dotenv==1.0.1
+# WebSocket / Async
+websockets==13.1
 httpx==0.27.2
 aiofiles==24.1.0
 
-# Reporting
+# Utilities
+python-dotenv==1.0.1
+
+# Reporting (optional - comment out if Render build times out)
 openpyxl==3.1.5
 reportlab==4.2.2
 
-# Testing
-pytest==8.3.3
-pytest-asyncio==0.24.0
-httpx==0.27.2
+# ASGI / Starlette (let FastAPI manage its own starlette version)
+# DO NOT pin starlette separately — FastAPI pins it as a dependency
 
-# CORS
-starlette==0.38.6
+# Testing (not needed in production - Render skips these)
+# pytest==8.3.3
+# pytest-asyncio==0.24.0

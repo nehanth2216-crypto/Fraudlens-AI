@@ -1,0 +1,77 @@
+# ============================================
+# FraudLens AI — .gitignore
+# ============================================
+
+# ---- Environment / Secrets (NEVER commit these) ----
+.env
+.env.local
+.env.production
+.env.staging
+*.secret
+
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.so
+.pytest_cache/
+*.egg-info/
+.eggs/
+dist/
+build/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# ---- Python Virtual Environments ----
+venv/
+.venv/
+env/
+.env_py/
+
+# ---- Node / Frontend ----
+node_modules/
+frontend/dist/
+frontend/.vite/
+.npm/
+*.tgz
+
+# ---- Database (local dev only) ----
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- ML Model Binaries (large binary files) ----
+backend/ml/models/*.pkl
+backend/ml/models/*.joblib
+backend/ml/models/*.json
+!backend/ml/models/.gitkeep
+
+# ---- Logs ----
+*.log
+logs/
+backend/scratch/
+
+# ---- IDE / Editor ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Docker data volumes ----
+docker-data/
+
+# ---- Cache ----
+.cache/
+*.cache

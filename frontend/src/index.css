@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* ============================================
+   FraudLens AI — Design System
+   Premium dark financial dashboard theme
+   ============================================ */
+
+@theme {
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+
+  --color-surface-900: #0b0f1a;
+  --color-surface-800: #111827;
+  --color-surface-700: #1a2035;
+  --color-surface-600: #1f2937;
+  --color-surface-500: #283548;
+
+  --color-risk-low: #10b981;
+  --color-risk-medium: #f59e0b;
+  --color-risk-high: #f97316;
+  --color-risk-critical: #ef4444;
+
+  --color-accent-cyan: #06b6d4;
+  --color-accent-violet: #8b5cf6;
+  --color-accent-emerald: #10b981;
+  --color-accent-rose: #f43f5e;
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--color-surface-900);
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface-800); }
+::-webkit-scrollbar-thumb { background: var(--color-surface-500); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand-500); }
+
+/* Glass card */
+.glass-card {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+.glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.05);
+}
+
+/* Risk badges */
+.badge-low { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.badge-medium { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+.badge-high { background: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+.badge-critical { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+/* Pulse animation for critical alerts */
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+.pulse-critical { animation: pulse-red 2s infinite; }
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.data-table th {
+  background: var(--color-surface-700);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.875rem;
+}
+.data-table tr:hover td {
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* Smooth transitions */
+.page-transition {
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Chat bubbles */
+.chat-user { background: var(--color-brand-600); border-radius: 16px 16px 4px 16px; }
+.chat-ai { background: var(--color-surface-600); border-radius: 16px 16px 16px 4px; }
+
+/* React Flow custom styles */
+.react-flow__node { font-family: 'Inter', sans-serif; }
+.react-flow__edge-path { stroke-width: 2; }
+.react-flow__background { background: var(--color-surface-900); }
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+/* Score ring */
+.score-ring {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* KPI Card */
+.kpi-card {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(26, 32, 53, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+}
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Input styles */
+input, select, textarea {
+  background: var(--color-surface-700);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}

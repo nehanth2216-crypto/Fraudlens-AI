@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: fraudlens-ai-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/seed_data.py; python scripts/seed_v2.py; uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./fraudlens.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRY_MINUTES
+        value: 480
+      - key: FRONTEND_URL
+        value: https://fraudlens-ai.vercel.app
+      - key: RISK_WEIGHT_ML
+        value: "0.35"
+      - key: RISK_WEIGHT_ANOMALY
+        value: "0.25"
+      - key: RISK_WEIGHT_BEHAVIOR
+        value: "0.25"
+      - key: RISK_WEIGHT_RULES
+        value: "0.15"
+      - key: RISK_THRESHOLD_LOW
+        value: "30"
+      - key: RISK_THRESHOLD_MEDIUM
+        value: "60"
+      - key: RISK_THRESHOLD_HIGH
+        value: "80"
+      - key: LOG_LEVEL
+        value: INFO

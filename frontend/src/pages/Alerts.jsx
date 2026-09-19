@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ShieldAlert, AlertTriangle, CheckCircle, Clock,
-  Filter, Search, UserCheck, FolderLock, Sparkles
+  Filter, Search, UserCheck, FolderLock, Sparkles, RefreshCw
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { alertsAPI } from '../api/client';
@@ -38,23 +38,31 @@ export default function Alerts() {
     }
   }
 
+  const criticalCount = alerts.filter(a => a.severity === 'CRITICAL').length;
+  const highCount = alerts.filter(a => a.severity === 'HIGH').length;
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0e131f] p-5 rounded-2xl border border-white/5 shadow-md">
+    <div className="space-y-5">
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-white tracking-tight">Fraud Alert Operations Queue</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
+              Paytm Security Operations
+            </span>
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">Real-time alerts flagged by ML ensemble, anomaly detection, and velocity rules</p>
+          <h1 className="text-xl font-bold text-[#002E6E] tracking-tight">Fraud Alert Operations Queue</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Real-time anomalies flagged by XGBoost ensemble, velocity checks, and mule ring detection models.
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
           <select
             value={severityFilter}
             onChange={(e) => setSeverityFilter(e.target.value)}
-            className="bg-[#0a0d14] border border-white/10 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-rose-500"
+            className="bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#00BAF2] cursor-pointer shadow-xs"
           >
             <option value="">All Severities</option>
             <option value="CRITICAL">Critical Only</option>
@@ -65,58 +73,89 @@ export default function Alerts() {
         </div>
       </div>
 
+      {/* Severity Highlights */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200 text-xs">
+          <span className="text-slate-400 block font-medium">Active Alerts</span>
+          <span className="text-base font-bold text-[#002E6E] font-mono">{alerts.length}</span>
+        </div>
+        <div className="bg-white p-3.5 rounded-xl border border-rose-200 bg-rose-50/40 text-xs">
+          <span className="text-rose-700 block font-medium">Critical Threats</span>
+          <span className="text-base font-bold text-rose-700 font-mono">{criticalCount}</span>
+        </div>
+        <div className="bg-white p-3.5 rounded-xl border border-amber-200 bg-amber-50/40 text-xs">
+          <span className="text-amber-800 block font-medium">High Severity</span>
+          <span className="text-base font-bold text-amber-800 font-mono">{highCount}</span>
+        </div>
+        <div className="bg-white p-3.5 rounded-xl border border-slate-200 text-xs">
+          <span className="text-slate-400 block font-medium">Mean Time to Resolve</span>
+          <span className="text-base font-bold text-[#002E6E] font-mono">4.2 mins</span>
+        </div>
+      </div>
+
       {/* Alerts Stream */}
       <div className="space-y-3">
-        {alerts.map((a, idx) => (
-          <div
-            key={idx}
-            className="bg-[#0e131f] p-4 rounded-xl border border-white/5 hover:border-white/20 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm"
-          >
-            <div className="space-y-1 max-w-xl">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold text-rose-400">ALERT #{a.id}</span>
-                <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded ${
-                  a.severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' :
-                  a.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                  'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                }`}>
-                  {a.severity}
-                </span>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  {a.created_at?.replace('T', ' ').substring(0, 19)}
-                </span>
+        {loading ? (
+          <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-400 text-xs">
+            <RefreshCw className="w-5 h-5 animate-spin mx-auto text-[#00BAF2] mb-2" />
+            Loading fraud alerts...
+          </div>
+        ) : alerts.length === 0 ? (
+          <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-500 text-xs">
+            No alerts found matching the selected filter. All systems clear.
+          </div>
+        ) : (
+          alerts.map((a, idx) => (
+            <div
+              key={idx}
+              className="bg-white p-4 rounded-2xl border border-slate-200 hover:border-[#00BAF2] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm"
+            >
+              <div className="space-y-1.5 max-w-2xl">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-mono text-xs font-bold text-[#002E6E]">ALERT #{a.id}</span>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
+                    a.severity === 'CRITICAL' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                    a.severity === 'HIGH' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                    'bg-sky-100 text-sky-800 border border-sky-200'
+                  }`}>
+                    {a.severity}
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    {a.created_at?.replace('T', ' ').substring(0, 19)}
+                  </span>
+                </div>
+
+                <h3 className="text-sm font-bold text-slate-900">{a.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">{a.description}</p>
               </div>
 
-              <h3 className="text-xs font-bold text-white">{a.title}</h3>
-              <p className="text-[11px] text-slate-400">{a.description}</p>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <Link
+                  to="/explainable-ai"
+                  className="inline-flex items-center gap-1 bg-[#E8F7FE] hover:bg-[#D4EFFF] text-[#002E6E] border border-[#00BAF2]/30 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#00BAF2]" />
+                  <span>Explain Risk</span>
+                </Link>
+
+                <Link
+                  to="/investigations"
+                  className="inline-flex items-center gap-1 bg-[#002E6E] hover:bg-[#001F4D] text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-colors shadow-xs"
+                >
+                  <FolderLock className="w-3.5 h-3.5" />
+                  <span>Open Case</span>
+                </Link>
+
+                <button
+                  onClick={() => handleResolve(a.id)}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors cursor-pointer"
+                >
+                  Resolve
+                </button>
+              </div>
             </div>
-
-            <div className="flex items-center gap-2.5 flex-shrink-0">
-              <Link
-                to="/explainable-ai"
-                className="flex items-center gap-1 bg-fuchsia-600/20 hover:bg-fuchsia-600/30 text-fuchsia-300 border border-fuchsia-500/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Explain Risk</span>
-              </Link>
-
-              <Link
-                to="/investigations"
-                className="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors shadow-sm"
-              >
-                <FolderLock className="w-3.5 h-3.5" />
-                <span>Open Case</span>
-              </Link>
-
-              <button
-                onClick={() => handleResolve(a.id)}
-                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold rounded-lg border border-white/10 transition-colors"
-              >
-                Resolve
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

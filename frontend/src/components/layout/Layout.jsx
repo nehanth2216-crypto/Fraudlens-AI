@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
-  LayoutDashboard, ArrowRightLeft, ShieldAlert, FolderLock, Users,
+  LayoutDashboard, ArrowRightLeft, ShieldAlert, FolderLock,
   ShieldCheck, AlertCircle, RotateCcw, UserX, MessageSquareQuote,
   Store, Network, Sparkles, Bot, BarChart3, LogOut, Menu, X,
-  Bell, Shield, Eye, ChevronRight
+  Bell, Shield, Eye, HelpCircle, CheckCircle2, AlertTriangle, ArrowUpRight
 } from 'lucide-react';
 
 const navigationGroups = [
@@ -19,7 +19,7 @@ const navigationGroups = [
     ]
   },
   {
-    title: 'V2 Intelligence Modules',
+    title: 'Paytm V2 Intelligence',
     items: [
       { path: '/scam-prevention', label: 'Scam Prevention', icon: ShieldCheck },
       { path: '/payment-failures', label: 'Failure Diagnosis', icon: AlertCircle },
@@ -32,7 +32,7 @@ const navigationGroups = [
     ]
   },
   {
-    title: 'AI & Intelligence',
+    title: 'AI & Analytics',
     items: [
       { path: '/copilot', label: 'AI Copilot (Dual-Mode)', icon: Bot, badge: 'AI' },
       { path: '/analytics', label: 'Portfolio Analytics', icon: BarChart3 },
@@ -45,24 +45,29 @@ export default function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showGuideModal, setShowGuideModal] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0a0d14] text-slate-100 font-sans">
-      {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} flex-shrink-0 bg-[#0e131f] border-r border-white/5 flex flex-col transition-all duration-300 z-30`}>
-        {/* Logo */}
-        <div className="h-16 flex items-center px-4 border-b border-white/5 justify-between">
-          <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25 flex-shrink-0">
-              <Shield className="w-5 h-5 text-white" />
+    <div className="flex h-screen overflow-hidden bg-[#F4F7FB] text-slate-800 font-sans">
+      {/* Sidebar: Authentic Paytm Deep Navy */}
+      <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} flex-shrink-0 bg-gradient-to-b from-[#002E6E] via-[#002458] to-[#001A3D] text-white flex flex-col transition-all duration-300 z-30 shadow-xl`}>
+        {/* Brand Header */}
+        <div className="h-16 flex items-center px-4 border-b border-white/10 justify-between">
+          <div className="flex items-center gap-2.5 overflow-hidden">
+            {/* Paytm Logo Badge */}
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md flex-shrink-0">
+              <span className="text-xs font-black tracking-tighter">
+                <span className="text-[#002E6E]">Pay</span>
+                <span className="text-[#00BAF2]">tm</span>
+              </span>
             </div>
             {sidebarOpen && (
               <div className="leading-tight">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="text-base font-bold bg-gradient-to-r from-white via-slate-100 to-blue-200 bg-clip-text text-transparent">FraudLens</h1>
-                  <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">V2</span>
+                  <h1 className="text-sm font-bold text-white tracking-tight">FraudLens <span className="text-[#00BAF2]">AI</span></h1>
+                  <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-[#00BAF2]/20 text-[#00BAF2] border border-[#00BAF2]/30">V2</span>
                 </div>
-                <p className="text-[10px] text-slate-400 tracking-wider">ENTERPRISE INTELLIGENCE</p>
+                <p className="text-[9px] text-blue-200/70 font-semibold tracking-wider uppercase">Paytm FinTech Shield</p>
               </div>
             )}
           </div>
@@ -73,7 +78,7 @@ export default function Layout({ children }) {
           {navigationGroups.map((group, gIdx) => (
             <div key={gIdx}>
               {sidebarOpen && (
-                <div className="px-3 mb-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="px-3 mb-1.5 text-[10px] font-bold text-blue-200/60 uppercase tracking-wider">
                   {group.title}
                 </div>
               )}
@@ -85,20 +90,21 @@ export default function Layout({ children }) {
                       key={path}
                       to={path}
                       title={!sidebarOpen ? label : undefined}
-                      className={`flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 group relative
+                      className={`flex items-center px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group relative
                         ${active
-                          ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm shadow-blue-900/20'
-                          : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 border border-transparent'
+                          ? 'bg-[#00BAF2] text-[#002E6E] shadow-md shadow-cyan-900/30 font-bold scale-[1.01]'
+                          : 'text-blue-100/80 hover:bg-white/10 hover:text-white'
                         }`}
                     >
-                      <Icon className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${active ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-300'}`} />
+                      <Icon className={`w-4 h-4 flex-shrink-0 transition-transform group-hover:scale-110 ${active ? 'text-[#002E6E]' : 'text-blue-200'}`} />
                       {sidebarOpen && (
                         <span className="ml-3 truncate flex-1">{label}</span>
                       )}
                       {sidebarOpen && badge && (
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                          badge === 'Live' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse' :
-                          'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                        <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded-full ${
+                          badge === 'Live'
+                            ? (active ? 'bg-[#002E6E] text-white' : 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30')
+                            : (active ? 'bg-[#002E6E] text-white' : 'bg-cyan-400/20 text-cyan-200 border border-cyan-400/30')
                         }`}>
                           {badge}
                         </span>
@@ -112,17 +118,17 @@ export default function Layout({ children }) {
         </nav>
 
         {/* User profile & sidebar toggle footer */}
-        <div className="p-3 border-t border-white/5 bg-[#0a0d14]/40 flex items-center justify-between">
+        <div className="p-3 border-t border-white/10 bg-black/20 flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-xs flex-shrink-0 shadow-inner">
-              {user?.name?.[0] || 'A'}
+            <div className="w-8 h-8 rounded-lg bg-[#00BAF2] text-[#002E6E] font-extrabold text-xs flex items-center justify-center flex-shrink-0 shadow-sm">
+              {user?.name?.[0] || 'P'}
             </div>
             {sidebarOpen && (
               <div className="truncate text-left">
-                <p className="text-xs font-semibold text-slate-200 truncate">{user?.name || 'Administrator'}</p>
-                <p className="text-[10px] text-emerald-400 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-ping"></span>
-                  {user?.role || 'ADMIN'}
+                <p className="text-xs font-bold text-white truncate">{user?.name || 'Paytm Officer'}</p>
+                <p className="text-[10px] text-cyan-300 flex items-center gap-1 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                  {user?.role || 'FINTECH ADMIN'}
                 </p>
               </div>
             )}
@@ -131,13 +137,13 @@ export default function Layout({ children }) {
             <button
               onClick={() => { logout(); navigate('/login'); }}
               title="Log out"
-              className="p-1.5 text-slate-400 hover:text-red-400 rounded-md hover:bg-red-500/10 transition-colors"
+              className="p-1.5 text-blue-200 hover:text-rose-300 rounded-lg hover:bg-white/10 transition-colors"
             >
               <LogOut className="w-4 h-4" />
             </button>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-white/5"
+              className="p-1.5 text-blue-200 hover:text-white rounded-lg hover:bg-white/10"
             >
               {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
@@ -145,45 +151,191 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content Area: Paytm Light Canvas */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header */}
-        <header className="h-16 bg-[#0e131f]/90 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 z-20">
+        {/* Top Header: Crisp White with Paytm Accents */}
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-20 shadow-xs">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2.5 bg-blue-950/40 border border-blue-500/20 px-3 py-1.5 rounded-full text-xs text-blue-300">
-              <Eye className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
-              <span>Real-Time Telemetry Stream: <strong className="text-emerald-400 font-mono">ONLINE</strong></span>
+            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-800">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Paytm Gateway Telemetry: <strong className="font-semibold text-emerald-900">ACTIVE</strong></span>
             </div>
-            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 border-l border-white/10 pl-4">
-              <span>Risk Engine: <span className="text-slate-300 font-mono">XGBoost v2.4 + Isolation Forest</span></span>
+            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-500 border-l border-slate-200 pl-4">
+              <span>Risk Engine: <span className="font-semibold text-[#002E6E]">Paytm AI Shield v2.4 (XGBoost)</span></span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Quick Explainer Guide Button */}
+            <button
+              onClick={() => setShowGuideModal(true)}
+              className="flex items-center gap-1.5 bg-[#E8F7FE] hover:bg-[#D4EFFF] text-[#002E6E] text-xs font-bold px-3 py-1.5 rounded-xl border border-[#00BAF2]/30 transition-all cursor-pointer"
+              title="Click for a simple guide on how to understand this platform"
+            >
+              <HelpCircle className="w-4 h-4 text-[#00BAF2]" />
+              <span>How It Works (Guide)</span>
+            </button>
+
+            {/* AI Copilot Fast Action */}
             <Link
               to="/copilot"
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md shadow-blue-600/20 transition-all transform active:scale-95"
+              className="flex items-center gap-1.5 bg-[#00BAF2] hover:bg-[#00a4d6] text-[#002E6E] text-xs font-bold px-3.5 py-1.5 rounded-xl shadow-sm transition-all transform active:scale-95"
             >
-              <Bot className="w-3.5 h-3.5" />
+              <Bot className="w-4 h-4" />
               <span>Launch Copilot</span>
             </Link>
 
+            {/* Alerts Bell */}
             <Link
               to="/alerts"
-              className="relative p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+              className="relative p-2 text-slate-600 hover:text-[#002E6E] rounded-xl hover:bg-slate-100 transition-colors"
+              title="View Fraud Alerts"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute 1 top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full animate-ping" />
-              <span className="absolute 1 top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full animate-ping" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full" />
             </Link>
           </div>
         </header>
 
         {/* Page Container */}
-        <main className="flex-1 overflow-y-auto p-6 bg-[#0a0d14] custom-scrollbar">
+        <main className="flex-1 overflow-y-auto p-6 bg-[#F4F7FB] custom-scrollbar">
           {children}
         </main>
       </div>
+
+      {/* User-Friendly Explainer Modal */}
+      {showGuideModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-fadeIn">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#00BAF2]/20 flex items-center justify-center text-[#002E6E]">
+                  <Shield className="w-5 h-5 text-[#00BAF2]" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-[#002E6E]">Paytm FraudLens AI — Quick Guide</h2>
+                  <p className="text-xs text-slate-500">Track 2: "Make Insurance, Lending and Fintech simpler, faster and more human"</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowGuideModal(false)}
+                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="bg-[#E8F7FE] p-3.5 rounded-xl border border-[#00BAF2]/20">
+                <h3 className="font-bold text-[#002E6E] text-sm mb-1 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#00BAF2]" />
+                  What is FraudLens AI?
+                </h3>
+                <p>
+                  FraudLens AI is an intelligent financial fraud intelligence shield built for the <strong>Paytm ecosystem</strong>. It analyzes transactions, device telemetry, and behavioral patterns in milliseconds to prevent scams and keep user payments safe.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider mb-2">
+                  Traffic Light Risk Scoring System
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <div className="font-bold text-emerald-800 flex items-center gap-1.5 mb-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                      Score 0 – 30: SAFE
+                    </div>
+                    <p className="text-[11px] text-emerald-900">
+                      Normal customer payment. Processed instantly without disruption.
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-amber-50 border border-amber-200">
+                    <div className="font-bold text-amber-800 flex items-center gap-1.5 mb-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                      Score 31 – 70: REVIEW
+                    </div>
+                    <p className="text-[11px] text-amber-900">
+                      Unusual device, amount, or location. Triggers quick 2FA/OTP check.
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200">
+                    <div className="font-bold text-rose-800 flex items-center gap-1.5 mb-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                      Score 71 – 100: BLOCKED
+                    </div>
+                    <p className="text-[11px] text-rose-900">
+                      Known scam pattern or mule syndicate. Payment blocked immediately.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider mb-2">
+                  Key Sections to Explore in This Demo
+                </h3>
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <Link
+                    to="/transactions"
+                    onClick={() => setShowGuideModal(false)}
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-[#00BAF2] hover:bg-[#F0F9FF] transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <strong className="text-[#002E6E] block">1. Live Transactions</strong>
+                      <span className="text-slate-500">Inspect real-time payments & risk scores</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-[#00BAF2]" />
+                  </Link>
+                  <Link
+                    to="/copilot"
+                    onClick={() => setShowGuideModal(false)}
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-[#00BAF2] hover:bg-[#F0F9FF] transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <strong className="text-[#002E6E] block">2. AI Copilot</strong>
+                      <span className="text-slate-500">Chat with Analyst or Customer Support AI</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-[#00BAF2]" />
+                  </Link>
+                  <Link
+                    to="/payment-failures"
+                    onClick={() => setShowGuideModal(false)}
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-[#00BAF2] hover:bg-[#F0F9FF] transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <strong className="text-[#002E6E] block">3. Failure Diagnosis</strong>
+                      <span className="text-slate-500">Smart Retry engine for failed UPI payments</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-[#00BAF2]" />
+                  </Link>
+                  <Link
+                    to="/investigations"
+                    onClick={() => setShowGuideModal(false)}
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-[#00BAF2] hover:bg-[#F0F9FF] transition-all flex items-center justify-between"
+                  >
+                    <div>
+                      <strong className="text-[#002E6E] block">4. Case & SAR Hub</strong>
+                      <span className="text-slate-500">FinCEN compliant fraud reports</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-[#00BAF2]" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-100 pt-3 flex justify-end">
+              <button
+                onClick={() => setShowGuideModal(false)}
+                className="bg-[#002E6E] hover:bg-[#001F4D] text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+              >
+                Got It! Continue to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

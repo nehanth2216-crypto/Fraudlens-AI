@@ -14,9 +14,9 @@ export default function AICopilot() {
     {
       sender: 'bot',
       text: (
-        "### 🛡️ FraudLens Intelligence Copilot Online\n\n" +
-        "I am connected to the real-time financial fraud database and payment switch telemetry. " +
-        "I can conduct technical forensics queries, generate FinCEN SAR drafts, or switch to Customer Support Mode to translate technical decline codes into friendly customer assistance scripts."
+        "### 🛡️ Paytm FraudLens Intelligence Copilot Online\n\n" +
+        "I am connected to the real-time Paytm payment switch and financial fraud telemetry. " +
+        "I can perform forensic audits, auto-generate FinCEN SAR regulatory filings, or switch to **Customer Support Mode** to translate cryptic decline codes into empathetic, plain-language customer guidance."
       ),
       suggested_actions: [
         { label: "Diagnose Decline for TXN-9A8F3B", action: "DIAGNOSE", target: "TXN-9A8F3B" },
@@ -85,30 +85,32 @@ export default function AICopilot() {
   return (
     <div className="space-y-4 max-w-5xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
       {/* Copilot Header */}
-      <div className="bg-[#0e131f] p-4 rounded-2xl border border-white/5 shadow-md flex items-center justify-between flex-shrink-0">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25">
+          <div className="w-10 h-10 rounded-xl bg-[#00BAF2] flex items-center justify-center text-[#002E6E] shadow-sm flex-shrink-0">
             <Bot className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold text-white">FraudLens AI Copilot</h1>
-              <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                DUAL-PERSONA
+              <h1 className="text-sm font-bold text-[#002E6E]">Paytm AI Copilot</h1>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 uppercase">
+                Dual-Persona Engine
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">Contextual intelligence for fraud analysts and customer care teams</p>
+            <p className="text-[11px] text-slate-500">
+              Instant AI assistance for fraud forensics & customer care teams
+            </p>
           </div>
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex items-center bg-[#0a0d14] p-1 rounded-xl border border-white/10">
+        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
           <button
             onClick={() => setMode('ANALYST')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               mode === 'ANALYST'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#002E6E] text-white shadow-sm'
+                : 'text-slate-600 hover:text-[#002E6E]'
             }`}
           >
             <Terminal className="w-3.5 h-3.5" />
@@ -116,50 +118,50 @@ export default function AICopilot() {
           </button>
           <button
             onClick={() => setMode('CUSTOMER_SUPPORT')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               mode === 'CUSTOMER_SUPPORT'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#00BAF2] text-[#002E6E] shadow-sm'
+                : 'text-slate-600 hover:text-[#002E6E]'
             }`}
           >
             <Headphones className="w-3.5 h-3.5" />
-            <span>Customer Support Mode</span>
+            <span>Customer Care Mode</span>
           </button>
         </div>
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 bg-[#0e131f] rounded-2xl border border-white/5 p-4 overflow-y-auto space-y-4 custom-scrollbar shadow-inner">
+      <div className="flex-1 bg-white rounded-2xl border border-slate-200 p-4 overflow-y-auto space-y-4 custom-scrollbar shadow-sm">
         {messages.map((m, idx) => (
           <div
             key={idx}
             className={`flex items-start gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {m.sender === 'bot' && (
-              <div className="w-7 h-7 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center flex-shrink-0 mt-1">
-                <Bot className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-xl bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+                <Bot className="w-4 h-4 text-[#00BAF2]" />
               </div>
             )}
 
             <div className={`max-w-2xl rounded-2xl p-4 text-xs leading-relaxed ${
               m.sender === 'user'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-[#0a0d14] border border-white/10 text-slate-200 shadow-sm'
+                ? 'bg-[#002E6E] text-white shadow-sm'
+                : 'bg-slate-50 border border-slate-200 text-slate-800 shadow-xs'
             }`}>
-              <div className="prose prose-invert prose-xs max-w-none whitespace-pre-wrap">
+              <div className="prose prose-xs max-w-none whitespace-pre-wrap text-slate-800">
                 {m.text}
               </div>
 
               {/* Action Buttons */}
               {m.suggested_actions?.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-white/10 flex flex-wrap gap-2">
+                <div className="mt-3 pt-3 border-t border-slate-200 flex flex-wrap gap-2">
                   {m.suggested_actions.map((act, aIdx) => (
                     <button
                       key={aIdx}
                       onClick={() => handleExecuteAction(act)}
-                      className="flex items-center gap-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-lg text-[11px] font-semibold transition-colors shadow-sm active:scale-95"
+                      className="flex items-center gap-1.5 bg-[#E8F7FE] hover:bg-[#D4EFFF] text-[#002E6E] border border-[#00BAF2]/30 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors cursor-pointer shadow-2xs active:scale-95"
                     >
-                      <Zap className="w-3 h-3 text-amber-400" />
+                      <Zap className="w-3 h-3 text-[#00BAF2]" />
                       <span>{act.label}</span>
                     </button>
                   ))}
@@ -168,7 +170,7 @@ export default function AICopilot() {
             </div>
 
             {m.sender === 'user' && (
-              <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-xl bg-[#00BAF2] text-[#002E6E] font-bold flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
                 <User className="w-4 h-4" />
               </div>
             )}
@@ -176,9 +178,9 @@ export default function AICopilot() {
         ))}
 
         {loading && (
-          <div className="flex items-center gap-2 text-slate-400 text-xs italic">
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-blue-400" />
-            <span>Copilot analyzing fraud database & telemetry...</span>
+          <div className="flex items-center gap-2 text-slate-500 text-xs italic bg-slate-50 p-3 rounded-xl border border-slate-200 w-fit">
+            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#00BAF2]" />
+            <span>Paytm Copilot querying fraud database & telemetry stream...</span>
           </div>
         )}
       </div>
@@ -186,19 +188,19 @@ export default function AICopilot() {
       {/* Quick Prompt Pills & Input Box */}
       <div className="space-y-2 flex-shrink-0">
         <div className="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] custom-scrollbar">
-          <span className="text-slate-500 flex-shrink-0 text-[10px] font-semibold">Suggested:</span>
+          <span className="text-slate-500 flex-shrink-0 text-[10px] font-bold uppercase tracking-wider">Suggested:</span>
           {quickPills.map((pill, idx) => (
             <button
               key={idx}
               onClick={() => handleSend(pill)}
-              className="bg-[#0e131f] hover:bg-white/10 text-slate-300 px-3 py-1 rounded-full border border-white/10 whitespace-nowrap transition-colors flex-shrink-0"
+              className="bg-white hover:bg-slate-50 text-[#002E6E] font-medium px-3 py-1 rounded-full border border-slate-200 whitespace-nowrap transition-colors flex-shrink-0 shadow-xs cursor-pointer hover:border-[#00BAF2]"
             >
               {pill}
             </button>
           ))}
         </div>
 
-        <div className="bg-[#0e131f] p-2 rounded-2xl border border-white/10 flex items-center gap-2 shadow-xl">
+        <div className="bg-white p-2 rounded-2xl border border-slate-300 flex items-center gap-2 shadow-sm focus-within:border-[#00BAF2] focus-within:ring-2 focus-within:ring-[#00BAF2]/20">
           <input
             type="text"
             value={input}
@@ -209,12 +211,12 @@ export default function AICopilot() {
                 ? "Ask about transaction forensics, SAR generation, decline root causes, or fraud rings..."
                 : "Ask for customer-friendly decline scripts, refund status, or provisional credit policy..."
             }
-            className="flex-1 bg-transparent px-3 py-1.5 text-xs text-white focus:outline-none placeholder:text-slate-500"
+            className="flex-1 bg-transparent px-3 py-1.5 text-xs text-slate-900 focus:outline-none placeholder:text-slate-400"
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || loading}
-            className="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-md shadow-blue-500/25 transition-all disabled:opacity-40"
+            className="w-10 h-10 rounded-xl bg-[#00BAF2] hover:bg-[#00a4d6] text-[#002E6E] font-bold flex items-center justify-center shadow-sm transition-all disabled:opacity-40 cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>

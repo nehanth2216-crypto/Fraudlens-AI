@@ -24,10 +24,16 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-[#0a0d14] flex items-center justify-center text-slate-400 text-sm">
+      <div className="h-screen w-screen bg-[#F4F7FB] flex items-center justify-center text-slate-700 text-xs">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />
-          <span>Authenticating FraudLens AI session...</span>
+          <div className="w-10 h-10 rounded-2xl bg-white shadow-md border border-slate-200 flex items-center justify-center">
+            <span className="text-xs font-black">
+              <span className="text-[#002E6E]">Pay</span>
+              <span className="text-[#00BAF2]">tm</span>
+            </span>
+          </div>
+          <div className="w-6 h-6 rounded-full border-2 border-[#00BAF2] border-t-transparent animate-spin" />
+          <span className="font-semibold text-[#002E6E]">Connecting to Paytm FraudLens Shield...</span>
         </div>
       </div>
     );

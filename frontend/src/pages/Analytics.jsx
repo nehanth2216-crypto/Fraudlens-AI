@@ -89,29 +89,33 @@ export default function Analytics() {
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Header & Investigation Mission Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-[#0e131f] p-5 rounded-2xl border border-white/5 shadow-md">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-white tracking-tight">Fraud Intelligence & Portfolio Analytics</h1>
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
-              PAYTM FINTECH RADAR
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 uppercase tracking-wider">
+              Paytm FinTech Radar
+            </span>
+            <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Live Telemetry
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 className="text-xl font-bold text-[#002E6E] tracking-tight">Fraud Intelligence & Portfolio Analytics</h1>
+          <p className="text-xs text-slate-500 mt-1">
             Real-time loss quantification, UPI & payment rail exposure, and priority investigation triaging
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex bg-[#161d2d] rounded-lg p-1 border border-white/5 text-xs">
+          <div className="flex bg-slate-100 rounded-xl p-1 border border-slate-200 text-xs">
             {[7, 14, 30].map((d) => (
               <button
                 key={d}
                 onClick={() => setDays(d)}
-                className={`px-3 py-1 rounded-md transition-all font-medium ${
+                className={`px-3 py-1 rounded-lg transition-all font-bold cursor-pointer ${
                   days === d
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[#002E6E] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-[#002E6E]'
                 }`}
               >
                 {d}D
@@ -122,7 +126,7 @@ export default function Analytics() {
           <button
             onClick={fetchAnalyticsData}
             disabled={refreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs border border-white/5 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#002E6E] text-xs font-bold border border-slate-200 transition-colors cursor-pointer"
             title="Refresh Live Data"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
@@ -238,7 +242,7 @@ export default function Analytics() {
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={trends} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                 <XAxis
                   dataKey="date"
                   stroke="#64748b"
@@ -248,10 +252,11 @@ export default function Analytics() {
                 <YAxis stroke="#64748b" fontSize={10} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0f172a',
-                    borderColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: '8px',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    borderRadius: '12px',
                     fontSize: '11px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                   }}
                   formatter={(val, name) => [val, name === 'total' ? 'Total Volume' : 'Suspicious Flagged']}
                 />
@@ -261,8 +266,8 @@ export default function Analytics() {
                   iconType="circle"
                   wrapperStyle={{ fontSize: '11px', paddingBottom: '8px' }}
                 />
-                <Bar dataKey="total" name="Legitimate" fill="#3b82f6" stackId="a" radius={[0, 0, 2, 2]} />
-                <Bar dataKey="fraudulent" name="Suspicious" fill="#ef4444" stackId="a" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="total" name="Legitimate" fill="#002E6E" stackId="a" radius={[0, 0, 2, 2]} />
+                <Bar dataKey="fraudulent" name="Suspicious" fill="#dc2626" stackId="a" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -291,7 +296,7 @@ export default function Analytics() {
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                 <XAxis
                   dataKey="date"
                   stroke="#64748b"
@@ -301,10 +306,11 @@ export default function Analytics() {
                 <YAxis stroke="#64748b" fontSize={10} tickFormatter={(v) => `${v}%`} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0f172a',
-                    borderColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: '8px',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    borderRadius: '12px',
                     fontSize: '11px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                   }}
                   formatter={(val) => [`${val}%`, 'Daily Fraud Rate']}
                 />
@@ -312,7 +318,7 @@ export default function Analytics() {
                   type="monotone"
                   dataKey="fraud_rate"
                   name="Fraud Rate %"
-                  stroke="#ef4444"
+                  stroke="#dc2626"
                   fill="url(#fraudRateGrad)"
                   strokeWidth={2}
                 />
@@ -351,10 +357,10 @@ export default function Analytics() {
                     </span>
                   </div>
                 </div>
-                <div className="w-full h-1.5 bg-[#161d2d] rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
-                      pm.fraud_rate > 10 ? 'bg-rose-500' : 'bg-blue-500'
+                      pm.fraud_rate > 10 ? 'bg-rose-500' : 'bg-[#002E6E]'
                     }`}
                     style={{ width: `${Math.min(pm.fraud_rate * 4, 100)}%` }}
                   />
@@ -394,10 +400,11 @@ export default function Analytics() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0f172a',
-                    borderColor: 'rgba(255,255,255,0.1)',
-                    borderRadius: '8px',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#e2e8f0',
+                    borderRadius: '12px',
                     fontSize: '11px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                   }}
                   formatter={(val, name) => [`${val} transactions`, name]}
                 />
@@ -434,15 +441,15 @@ export default function Analytics() {
 
           <div className="space-y-2.5 pt-2">
             {locations.map((loc, idx) => (
-              <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-[#141b2a] border border-white/5">
+              <div key={idx} className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-[10px] font-mono font-bold">
+                  <span className="w-5 h-5 rounded-full bg-[#E8F7FE] text-[#002E6E] flex items-center justify-center text-[10px] font-mono font-bold">
                     {idx + 1}
                   </span>
-                  <span className="text-xs font-medium text-slate-200">{loc.city}</span>
+                  <span className="text-xs font-semibold text-slate-800">{loc.city}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-slate-300">{loc.count}</span>
+                  <span className="text-xs font-mono font-bold text-[#002E6E]">{loc.count}</span>
                   <span className="text-[10px] text-slate-500">txns</span>
                 </div>
               </div>
@@ -478,7 +485,7 @@ export default function Analytics() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/5 bg-[#121826] text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold text-[#002E6E] uppercase tracking-wider">
                 <th className="py-3 px-4">Transaction ID</th>
                 <th className="py-3 px-4">Amount</th>
                 <th className="py-3 px-4">Payment Rail</th>
@@ -498,27 +505,27 @@ export default function Analytics() {
                 </tr>
               ) : (
                 highRiskTxns.map((txn) => (
-                  <tr key={txn.id} className="hover:bg-white/[0.02] transition-colors group">
-                    <td className="py-3 px-4 font-mono font-bold text-blue-400">
+                  <tr key={txn.id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="py-3 px-4 font-mono font-bold text-[#002E6E]">
                       {txn.transaction_id}
                     </td>
-                    <td className="py-3 px-4 font-mono font-bold text-white">
+                    <td className="py-3 px-4 font-mono font-bold text-slate-900">
                       ₹{Number(txn.amount).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
                     </td>
                     <td className="py-3 px-4">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-white/5 text-slate-300">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                         {txn.payment_method || 'UPI'}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">
+                    <td className="py-3 px-4 text-slate-500 font-mono text-[11px]">
                       {txn.timestamp ? new Date(txn.timestamp).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }) : '—'}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-rose-400">
+                        <span className="font-mono font-bold text-rose-700">
                           {txn.risk_score}/100
                         </span>
-                        <div className="w-12 h-1.5 bg-[#1e293b] rounded-full overflow-hidden">
+                        <div className="w-12 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-rose-500 rounded-full"
                             style={{ width: `${txn.risk_score}%` }}

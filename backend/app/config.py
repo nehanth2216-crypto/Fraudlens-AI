@@ -34,10 +34,10 @@ class Settings(BaseSettings):
     RISK_WEIGHT_BEHAVIOR: float = 0.25
     RISK_WEIGHT_RULES: float = 0.15
 
-    # Risk Thresholds
+    # Risk Thresholds (Paytm FinTech Spec: 0-30 LOW, 31-70 MEDIUM, 71-100 HIGH)
     RISK_THRESHOLD_LOW: int = 30
-    RISK_THRESHOLD_MEDIUM: int = 60
-    RISK_THRESHOLD_HIGH: int = 80
+    RISK_THRESHOLD_MEDIUM: int = 70
+    RISK_THRESHOLD_HIGH: int = 85
 
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60

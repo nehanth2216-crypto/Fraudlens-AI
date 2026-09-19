@@ -34,7 +34,7 @@ def generate_explanations(features: dict, ml_score: float,
     # ML model confidence
     if ml_score > 0.7:
         explanations.append(
-            f"Machine learning model indicates {ml_score*100:.0f}% fraud probability"
+            f"Machine learning model indicates {ml_score*100:.0f}% potential fraud probability (suspicious pattern detected)"
         )
 
     # Anomaly detection

@@ -64,7 +64,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://localhost:3000",
         "https://fraudlens-ai.vercel.app",
-        # Allow any *.vercel.app preview deployment
+        "https://fraudlens-ai-sable.vercel.app",
     ],
     allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,

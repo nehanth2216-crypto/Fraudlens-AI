@@ -50,6 +50,13 @@ def dashboard_overview(db: Session = Depends(get_db),
     return get_dashboard_overview(db)
 
 
+@dashboard_router.get("/summary")
+def dashboard_summary(db: Session = Depends(get_db),
+                      user: User = Depends(get_current_active_user)):
+    """Alias endpoint for /overview returning high-level KPI summary."""
+    return get_dashboard_overview(db)
+
+
 @dashboard_router.get("/recent-transactions")
 def dashboard_recent(db: Session = Depends(get_db),
                      user: User = Depends(get_current_active_user)):

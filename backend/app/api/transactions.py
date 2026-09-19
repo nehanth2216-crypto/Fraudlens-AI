@@ -65,6 +65,33 @@ def list_transactions(
     ]
 
 
+@router.post("", response_model=dict, status_code=201)
+def create_transaction(
+    data: TransactionCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_active_user),
+):
+    """
+    Create a new transaction and immediately execute the full ML fraud risk pipeline.
+    Runs feature engineering, XGBoost inference, Isolation Forest anomaly scoring,
+    behavioral checks, rule engine, and generates human-readable explanations.
+    """
+    result = analyze_transaction(
+        db=db,
+        account_id=data.account_id,
+        amount=data.amount,
+        payment_method=str(data.payment_method),
+        transaction_type=str(data.transaction_type or "TRANSFER"),
+        beneficiary_id=data.beneficiary_id,
+        merchant_id=data.merchant_id,
+        device_id=data.device_id,
+        location_id=data.location_id,
+        ip_address_id=data.ip_address_id,
+        timestamp=data.timestamp or datetime.utcnow(),
+    )
+    return result
+
+
 @router.get("/{txn_id}")
 def get_transaction(txn_id: int, db: Session = Depends(get_db),
                     user: User = Depends(get_current_active_user)):

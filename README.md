@@ -8,7 +8,7 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.4-FF6600?style=for-the-badge)](https://xgboost.ai)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Paytm AI Hackathon](https://img.shields.io/badge/Paytm%20AI%20Hackathon-Track%202%20Fintech-002E6E?style=for-the-badge)](https://fraudlens-ai-sable.vercel.app)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://fraudlens-ai-sable.vercel.app)
 [![API Docs](https://img.shields.io/badge/API%20Docs-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://fraudlens-ai-1-pfvy.onrender.com/docs)
 
@@ -20,7 +20,10 @@
 
 ---
 
-> **FraudLens AI V2** is a production-grade, full-stack financial crime intelligence platform featuring real-time ML fraud scoring, multi-hop network graph analysis, explainable AI, and 10 enterprise-grade investigation modules.
+> 🏆 **Paytm AI Hackathon — Track 2: AI-Powered Financial Journeys**  
+> *"Make Insurance, Lending and Fintech simpler, faster and more human."*  
+>
+> **FraudLens AI** is an AI-powered fraud intelligence platform designed for digital payment and FinTech ecosystems. It delivers real-time ML fraud scoring, UPI/VPA surveillance, multi-hop mule syndicate detection, explainable AI (SHAP), and dual-mode conversational investigation.
 
 </div>
 
@@ -249,6 +252,29 @@ npm run dev
 | **Fraud Analyst** | `analyst@fraudlens.ai` | `analyst123` | All modules, read-write |
 | **Investigator** | `investigator@fraudlens.ai` | `invest123` | Investigation & SAR modules |
 | **Viewer** | `viewer@fraudlens.ai` | `viewer123` | Read-only dashboard |
+
+---
+
+## 🎪 Hackathon Demo Walkthrough (Paytm Track 2 Flow)
+
+Follow this presentation flow to showcase the complete full-stack platform:
+
+1. **Sign In & Security Command Center (`/`)**:
+   - Log in with one-click demo credentials (`admin@fraudlens.ai` / `admin123`).
+   - View live telemetry: 1,200+ transactions, real-time fraud detection rate (12.3%), and high-risk flags.
+2. **Real-Time Fraud & Scam Prevention (`/scam-prevention`)**:
+   - Run the interactive **Scam Simulator** for a simulated high-velocity UPI transaction.
+   - Observe instant flagging, mule account velocity risk scoring, and rule attribution.
+3. **Multi-Hop Fraud Ring Syndicate (`/fraud-network`)**:
+   - Explore the interactive entity graph revealing a money mule ring sharing device fingerprints and bank VPAs.
+4. **Explainable AI & Counterfactual Sandbox (`/explainable-ai`)**:
+   - Inspect the SHAP-style waterfall attribution showing exact positive and negative risk drivers.
+   - Adjust the counterfactual sliders (amount, known device, 3DS) to demonstrate how changes flip the decision from **HOLD** to **APPROVE**.
+5. **Dual-Mode AI Copilot (`/copilot`)**:
+   - In **Analyst Forensics Mode**: Query transaction root causes or generate FinCEN SAR drafts.
+   - In **Customer Support Mode**: Generate empathetic, plain-language explanation scripts and one-click remediation actions.
+6. **Case Resolution & Automated SAR (`/investigations`)**:
+   - Triage open investigations, review evidence with SHA-256 integrity, and generate regulatory filings.
 
 ---
 

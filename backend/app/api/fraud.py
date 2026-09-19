@@ -47,6 +47,20 @@ def analyze_fraud(
     return result
 
 
+@router.post("/predict", response_model=FraudAnalyzeResponse)
+def predict_fraud(
+    data: FraudAnalyzeRequest,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_active_user),
+):
+    """
+    Alias endpoint for /analyze.
+    Runs full ML model inference, anomaly detection, behavioral scoring,
+    and returns comprehensive fraud risk assessment.
+    """
+    return analyze_fraud(data=data, db=db, user=user)
+
+
 @router.get("/high-risk")
 def get_high_risk_transactions(
     limit: int = 20,

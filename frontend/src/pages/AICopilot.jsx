@@ -14,7 +14,7 @@ export default function AICopilot() {
     {
       sender: 'bot',
       text: (
-        "### 🛡️ Paytm FraudLens Intelligence Copilot Online\n\n" +
+        "### 🛡️ Apex Intelligence Copilot Online\n\n" +
         "I am connected to the real-time Paytm payment switch and financial fraud telemetry. " +
         "I can perform forensic audits, auto-generate FinCEN SAR regulatory filings, or switch to **Customer Support Mode** to translate cryptic decline codes into empathetic, plain-language customer guidance."
       ),
@@ -92,7 +92,7 @@ export default function AICopilot() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold text-[#002E6E]">Paytm AI Copilot</h1>
+              <h1 className="text-sm font-bold text-[#002E6E]">Apex AI Copilot</h1>
               <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 uppercase">
                 Dual-Persona Engine
               </span>

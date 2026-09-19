@@ -17,7 +17,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email, password);
-      toast.success('Welcome to Paytm FraudLens AI');
+      toast.success('Welcome to Apex AI');
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Login failed. Check credentials.');
@@ -41,16 +41,20 @@ export default function Login() {
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        {/* Paytm Logo & Brand */}
+        {/* Apex Logo & Brand in Paytm Colors */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center px-4 py-2 rounded-2xl bg-white shadow-md border border-slate-200 mb-3">
-            <span className="text-2xl font-black tracking-tight">
-              <span className="text-[#002E6E]">Pay</span>
-              <span className="text-[#00BAF2]">tm</span>
+          <div className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-2xl bg-white shadow-md border border-slate-200 mb-3">
+            <svg className="w-8 h-8 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3L4 19.5H9L12 12.5L15 19.5H20L12 3Z" fill="#002E6E" />
+              <path d="M12 3L15 19.5H20L12 3Z" fill="#00BAF2" />
+            </svg>
+            <span className="text-3xl font-black tracking-tight">
+              <span className="text-[#002E6E]">Ap</span>
+              <span className="text-[#00BAF2]">ex</span>
             </span>
           </div>
           <h1 className="text-2xl font-black text-[#002E6E] tracking-tight">
-            FraudLens <span className="text-[#00BAF2]">AI</span>
+            Apex <span className="text-[#00BAF2]">AI</span>
           </h1>
           <p className="text-xs text-slate-600 font-medium mt-1">
             Financial Crime & Risk Intelligence Shield
@@ -107,7 +111,7 @@ export default function Login() {
               className="w-full bg-[#00BAF2] hover:bg-[#00a4d6] text-[#002E6E] font-extrabold py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs tracking-wide cursor-pointer active:scale-98"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              <span>{loading ? 'Authenticating...' : 'Sign In with Paytm SSO'}</span>
+              <span>{loading ? 'Authenticating...' : 'Sign In to Apex AI'}</span>
               {!loading && <ArrowRight className="w-3.5 h-3.5" />}
             </button>
           </form>

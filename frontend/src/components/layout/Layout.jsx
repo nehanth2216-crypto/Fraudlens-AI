@@ -54,17 +54,21 @@ export default function Layout({ children }) {
         {/* Brand Header */}
         <div className="h-16 flex items-center px-4 border-b border-white/10 justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            {/* Paytm Logo Badge */}
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md flex-shrink-0">
-              <span className="text-xs font-black tracking-tighter">
-                <span className="text-[#002E6E]">Pay</span>
-                <span className="text-[#00BAF2]">tm</span>
+            {/* Apex Logo Badge in Paytm Colors */}
+            <div className="h-10 px-2.5 rounded-xl bg-white flex items-center justify-center gap-1.5 shadow-md flex-shrink-0">
+              <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3L4 19.5H9L12 12.5L15 19.5H20L12 3Z" fill="#002E6E" />
+                <path d="M12 3L15 19.5H20L12 3Z" fill="#00BAF2" />
+              </svg>
+              <span className="text-xs font-black tracking-tight">
+                <span className="text-[#002E6E]">Ap</span>
+                <span className="text-[#00BAF2]">ex</span>
               </span>
             </div>
             {sidebarOpen && (
               <div className="leading-tight">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="text-sm font-bold text-white tracking-tight">FraudLens <span className="text-[#00BAF2]">AI</span></h1>
+                  <h1 className="text-sm font-bold text-white tracking-tight">Apex <span className="text-[#00BAF2]">AI</span></h1>
                   <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-[#00BAF2]/20 text-[#00BAF2] border border-[#00BAF2]/30">V2</span>
                 </div>
                 <p className="text-[9px] text-blue-200/70 font-semibold tracking-wider uppercase">Paytm FinTech Shield</p>
@@ -214,7 +218,7 @@ export default function Layout({ children }) {
                   <Shield className="w-5 h-5 text-[#00BAF2]" />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-[#002E6E]">Paytm FraudLens AI — Quick Guide</h2>
+                  <h2 className="text-base font-bold text-[#002E6E]">Apex FraudLens AI — Quick Guide</h2>
                   <p className="text-xs text-slate-500">Track 2: "Make Insurance, Lending and Fintech simpler, faster and more human"</p>
                 </div>
               </div>
@@ -230,10 +234,10 @@ export default function Layout({ children }) {
               <div className="bg-[#E8F7FE] p-3.5 rounded-xl border border-[#00BAF2]/20">
                 <h3 className="font-bold text-[#002E6E] text-sm mb-1 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-[#00BAF2]" />
-                  What is FraudLens AI?
+                  What is Apex AI?
                 </h3>
                 <p>
-                  FraudLens AI is an intelligent financial fraud intelligence shield built for the <strong>Paytm ecosystem</strong>. It analyzes transactions, device telemetry, and behavioral patterns in milliseconds to prevent scams and keep user payments safe.
+                  Apex AI is an intelligent financial fraud intelligence shield built for the <strong>Paytm ecosystem</strong>. It analyzes transactions, device telemetry, and behavioral patterns in milliseconds to prevent scams and keep user payments safe.
                 </p>
               </div>
 

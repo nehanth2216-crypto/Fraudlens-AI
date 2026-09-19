@@ -78,7 +78,7 @@ export default function Dashboard() {
             </span>
           </div>
           <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white hero-banner-title">
-            Paytm FraudLens AI — Command Center
+            Apex AI — Paytm FinTech Command Center
           </h1>
           <p className="text-xs md:text-sm text-blue-100/90 mt-1.5 max-w-2xl leading-relaxed">
             Real-time financial crime detection, automated UPI failure diagnostics, and intelligent chargeback recovery — making digital finance simpler, faster, and more human.
@@ -176,7 +176,7 @@ export default function Dashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
             <h2 className="text-base font-bold text-[#002E6E] flex items-center gap-2">
-              <span>Paytm FinTech Intelligence Modules</span>
+              <span>Apex FinTech Intelligence Modules</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30">
                 10 Systems Ready
               </span>

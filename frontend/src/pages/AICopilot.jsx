@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Bot, Send, Sparkles, User, Terminal, Headphones, CheckCircle,
-  Zap, Play, ArrowRight, Shield, RefreshCw
+  Zap, Play, ArrowRight, Shield, RefreshCw, Trash2, ShieldCheck,
+  HelpCircle, CornerDownLeft
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { v2CopilotAPI } from '../api/client';
+import { useAuth } from '../context/AuthContext';
+import ChatMessage from '../components/chat/ChatMessage';
 
 export default function AICopilot() {
+  const { user } = useAuth();
   const [mode, setMode] = useState('ANALYST'); // 'ANALYST' or 'CUSTOMER_SUPPORT'
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,9 +26,21 @@ export default function AICopilot() {
         { label: "Diagnose Decline for TXN-9A8F3B", action: "DIAGNOSE", target: "TXN-9A8F3B" },
         { label: "Draft FinCEN SAR for Mule Syndicate", action: "OPEN_SAR", target: "RING-01" },
         { label: "Check Active Alerts", action: "NAVIGATE_ALERTS", target: "HIGH" }
-      ]
+      ],
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     }
   ]);
+
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, loading]);
 
   const quickPills = mode === 'ANALYST' ? [
     "Draft a FinCEN SAR narrative for the Patel mule syndicate",
@@ -42,28 +58,38 @@ export default function AICopilot() {
     const text = msgToSend || input;
     if (!text.trim()) return;
 
-    const userMsg = { sender: 'user', text };
+    const userMsg = {
+      sender: 'user',
+      text: text.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setLoading(true);
 
     try {
       const res = await v2CopilotAPI.chat({
-        message: text,
-        mode
+        message: text.trim(),
+        mode,
       });
 
       const botMsg = {
         sender: 'bot',
         text: res.data.reply,
-        suggested_actions: res.data.suggested_actions || []
+        suggested_actions: res.data.suggested_actions || [],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages(prev => [...prev, botMsg]);
     } catch (err) {
       toast.error('Copilot request failed');
       setMessages(prev => [
         ...prev,
-        { sender: 'bot', text: 'An error occurred while connecting to the intelligence copilot.' }
+        {
+          sender: 'bot',
+          text: 'An error occurred while connecting to the intelligence copilot. Please check network telemetry.',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        }
       ]);
     } finally {
       setLoading(false);
@@ -82,107 +108,93 @@ export default function AICopilot() {
     }
   }
 
+  const handleClearChat = () => {
+    setMessages(messages.slice(0, 1));
+    toast('Chat history cleared');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
-    <div className="space-y-4 max-w-5xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
+    <div className="space-y-4 max-w-5xl mx-auto h-[calc(100vh-8.5rem)] flex flex-col">
       {/* Copilot Header */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#00BAF2] flex items-center justify-center text-[#002E6E] shadow-sm flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002E6E] to-[#005CE6] flex items-center justify-center text-[#00BAF2] shadow-sm flex-shrink-0 border border-[#00BAF2]/30">
             <Bot className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold text-[#002E6E]">Apex AI Copilot</h1>
+              <h1 className="text-base font-bold text-[#002E6E]">Apex FinTech Intelligence Copilot</h1>
               <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 uppercase">
                 Dual-Persona Engine
               </span>
             </div>
             <p className="text-[11px] text-slate-500">
-              Instant AI assistance for fraud forensics & customer care teams
+              Officer session: <strong className="text-[#002E6E]">{user?.name || 'Officer'}</strong> • Connected to Live Payment Switch & ML Telemetry
             </p>
           </div>
         </div>
 
-        {/* Mode Switcher */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+        {/* Mode Switcher & Actions */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setMode('ANALYST')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                mode === 'ANALYST'
+                  ? 'bg-[#002E6E] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-[#002E6E]'
+              }`}
+            >
+              <Terminal className="w-3.5 h-3.5" />
+              <span>Fraud Analyst</span>
+            </button>
+            <button
+              onClick={() => setMode('CUSTOMER_SUPPORT')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                mode === 'CUSTOMER_SUPPORT'
+                  ? 'bg-[#00BAF2] text-[#002E6E] shadow-sm'
+                  : 'text-slate-600 hover:text-[#002E6E]'
+              }`}
+            >
+              <Headphones className="w-3.5 h-3.5" />
+              <span>Customer Care</span>
+            </button>
+          </div>
+
           <button
-            onClick={() => setMode('ANALYST')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              mode === 'ANALYST'
-                ? 'bg-[#002E6E] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#002E6E]'
-            }`}
+            onClick={handleClearChat}
+            className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors cursor-pointer"
+            title="Clear Chat"
           >
-            <Terminal className="w-3.5 h-3.5" />
-            <span>Fraud Analyst Mode</span>
-          </button>
-          <button
-            onClick={() => setMode('CUSTOMER_SUPPORT')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              mode === 'CUSTOMER_SUPPORT'
-                ? 'bg-[#00BAF2] text-[#002E6E] shadow-sm'
-                : 'text-slate-600 hover:text-[#002E6E]'
-            }`}
-          >
-            <Headphones className="w-3.5 h-3.5" />
-            <span>Customer Care Mode</span>
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 bg-white rounded-2xl border border-slate-200 p-4 overflow-y-auto space-y-4 custom-scrollbar shadow-sm">
+      <div className="flex-1 bg-white rounded-2xl border border-slate-200 p-5 overflow-y-auto space-y-4 custom-scrollbar shadow-sm">
         {messages.map((m, idx) => (
-          <div
+          <ChatMessage
             key={idx}
-            className={`flex items-start gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            {m.sender === 'bot' && (
-              <div className="w-8 h-8 rounded-xl bg-[#E8F7FE] text-[#002E6E] border border-[#00BAF2]/30 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
-                <Bot className="w-4 h-4 text-[#00BAF2]" />
-              </div>
-            )}
-
-            <div className={`max-w-2xl rounded-2xl p-4 text-xs leading-relaxed ${
-              m.sender === 'user'
-                ? 'bg-[#002E6E] text-white shadow-sm'
-                : 'bg-slate-50 border border-slate-200 text-slate-800 shadow-xs'
-            }`}>
-              <div className="prose prose-xs max-w-none whitespace-pre-wrap text-slate-800">
-                {m.text}
-              </div>
-
-              {/* Action Buttons */}
-              {m.suggested_actions?.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-slate-200 flex flex-wrap gap-2">
-                  {m.suggested_actions.map((act, aIdx) => (
-                    <button
-                      key={aIdx}
-                      onClick={() => handleExecuteAction(act)}
-                      className="flex items-center gap-1.5 bg-[#E8F7FE] hover:bg-[#D4EFFF] text-[#002E6E] border border-[#00BAF2]/30 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors cursor-pointer shadow-2xs active:scale-95"
-                    >
-                      <Zap className="w-3 h-3 text-[#00BAF2]" />
-                      <span>{act.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {m.sender === 'user' && (
-              <div className="w-8 h-8 rounded-xl bg-[#00BAF2] text-[#002E6E] font-bold flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
-                <User className="w-4 h-4" />
-              </div>
-            )}
-          </div>
+            message={m}
+            onExecuteAction={handleExecuteAction}
+          />
         ))}
 
         {loading && (
-          <div className="flex items-center gap-2 text-slate-500 text-xs italic bg-slate-50 p-3 rounded-xl border border-slate-200 w-fit">
-            <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#00BAF2]" />
-            <span>Paytm Copilot querying fraud database & telemetry stream...</span>
+          <div className="flex items-center gap-2.5 text-slate-500 text-xs italic bg-slate-50 p-3.5 rounded-2xl border border-slate-200 w-fit shadow-xs">
+            <RefreshCw className="w-4 h-4 animate-spin text-[#00BAF2]" />
+            <span>Paytm Copilot querying fraud database, decline taxonomy & telemetry stream...</span>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Quick Prompt Pills & Input Box */}
@@ -193,33 +205,39 @@ export default function AICopilot() {
             <button
               key={idx}
               onClick={() => handleSend(pill)}
-              className="bg-white hover:bg-slate-50 text-[#002E6E] font-medium px-3 py-1 rounded-full border border-slate-200 whitespace-nowrap transition-colors flex-shrink-0 shadow-xs cursor-pointer hover:border-[#00BAF2]"
+              className="bg-white hover:bg-slate-50 text-[#002E6E] font-semibold px-3 py-1.5 rounded-full border border-slate-200 whitespace-nowrap transition-colors flex-shrink-0 shadow-xs cursor-pointer hover:border-[#00BAF2] active:scale-95"
             >
               {pill}
             </button>
           ))}
         </div>
 
-        <div className="bg-white p-2 rounded-2xl border border-slate-300 flex items-center gap-2 shadow-sm focus-within:border-[#00BAF2] focus-within:ring-2 focus-within:ring-[#00BAF2]/20">
-          <input
-            type="text"
+        <div className="bg-white p-2.5 rounded-2xl border border-slate-300 flex items-center gap-3 shadow-sm focus-within:border-[#00BAF2] focus-within:ring-2 focus-within:ring-[#00BAF2]/20">
+          <textarea
+            ref={inputRef}
+            rows={1}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={handleKeyDown}
             placeholder={
               mode === 'ANALYST'
-                ? "Ask about transaction forensics, SAR generation, decline root causes, or fraud rings..."
-                : "Ask for customer-friendly decline scripts, refund status, or provisional credit policy..."
+                ? "Ask about transaction forensics, SAR generation, decline root causes, or fraud rings... (Press Enter to send)"
+                : "Ask for customer-friendly decline scripts, refund status, or provisional credit policy... (Press Enter to send)"
             }
-            className="flex-1 bg-transparent px-3 py-1.5 text-xs text-slate-900 focus:outline-none placeholder:text-slate-400"
+            className="flex-1 bg-transparent px-3 py-1 text-xs text-slate-900 focus:outline-none placeholder:text-slate-400 resize-none max-h-24"
           />
-          <button
-            onClick={() => handleSend()}
-            disabled={!input.trim() || loading}
-            className="w-10 h-10 rounded-xl bg-[#00BAF2] hover:bg-[#00a4d6] text-[#002E6E] font-bold flex items-center justify-center shadow-sm transition-all disabled:opacity-40 cursor-pointer"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-slate-400 hidden sm:inline font-mono">
+              ↵ Enter
+            </span>
+            <button
+              onClick={() => handleSend()}
+              disabled={!input.trim() || loading}
+              className="w-10 h-10 rounded-xl bg-[#00BAF2] hover:bg-[#00a4d6] text-[#002E6E] font-bold flex items-center justify-center shadow-sm transition-all disabled:opacity-40 cursor-pointer active:scale-95"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

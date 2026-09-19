@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import FloatingChatWidget from '../chat/FloatingChatWidget';
 import {
   LayoutDashboard, ArrowRightLeft, ShieldAlert, FolderLock,
   ShieldCheck, AlertCircle, RotateCcw, UserX, MessageSquareQuote,
@@ -351,6 +352,9 @@ export default function Layout({ children }) {
           </div>
         </div>
       )}
+
+      {/* Floating AI Chatbox Assistant (Accessible Across All Platform Pages) */}
+      {location.pathname !== '/copilot' && <FloatingChatWidget />}
     </div>
   );
 }

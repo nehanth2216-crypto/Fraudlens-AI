@@ -23,6 +23,7 @@ from app.models.device import Device
 from app.models.beneficiary import Beneficiary
 from app.models.merchant import Merchant
 from app.models.location import Location
+from app.models.audit_log import AuditLog
 from app.schemas import (
     InvestigationCreate, InvestigationUpdate, InvestigationNote,
     InvestigationClose, AssistantMessage,

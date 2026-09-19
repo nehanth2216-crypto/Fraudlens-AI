@@ -5,9 +5,15 @@
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://fraudlens-ai-1-pfvy.onrender.com/api/$1"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "env": {
-    "VITE_API_URL": "https://fraudlens-ai-1-pfvy.onrender.com"
+  "build": {
+    "env": {
+      "VITE_API_URL": "https://fraudlens-ai-1-pfvy.onrender.com"
+    }
   }
 }

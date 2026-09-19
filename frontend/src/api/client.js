@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-// In production (Vercel) VITE_API_URL points to the Render backend.
-// In local dev the Vite proxy forwards /api → http://localhost:8000.
+// Live production Render backend URL
+const PRODUCTION_BACKEND = 'https://fraudlens-ai-1-pfvy.onrender.com';
+
+// In production (Vercel) points to Render backend; in local dev forwards to /api via Vite proxy
 const API_BASE = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
-  : '/api';
+  : (import.meta.env.PROD ? `${PRODUCTION_BACKEND}/api` : '/api');
 
 const api = axios.create({
   baseURL: API_BASE,

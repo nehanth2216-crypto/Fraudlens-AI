@@ -1,4 +1,4 @@
-"""FraudAlert model — alerts generated from fraud detection."""
+"""FraudAlert & AlertComment models — alerts and collaborative investigation comments."""
 
 import enum
 from datetime import datetime
@@ -40,6 +40,8 @@ class FraudAlert(Base):
     description = Column(Text, nullable=True)
     status = Column(Enum(AlertStatus), default=AlertStatus.OPEN, nullable=False)
     assigned_to = Column(Integer, ForeignKey("users.id"), nullable=True)
+    resolution = Column(String(100), nullable=True)  # e.g., RESOLVED_LEGITIMATE, BLOCKED_FRAUD
+    notes = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     resolved_at = Column(DateTime, nullable=True)
 
@@ -47,3 +49,19 @@ class FraudAlert(Base):
     transaction = relationship("Transaction", back_populates="alerts")
     assignee = relationship("User", foreign_keys=[assigned_to])
     investigations = relationship("Investigation", back_populates="alert")
+    comments = relationship("AlertComment", back_populates="alert", cascade="all, delete-orphan", order_by="AlertComment.created_at.asc()")
+
+
+class AlertComment(Base):
+    __tablename__ = "alert_comments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    alert_id = Column(Integer, ForeignKey("fraud_alerts.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    user_name = Column(String(255), nullable=False)
+    comment = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+    # Relationships
+    alert = relationship("FraudAlert", back_populates="comments")
+    author = relationship("User", foreign_keys=[user_id])

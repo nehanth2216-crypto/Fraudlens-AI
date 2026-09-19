@@ -7,7 +7,7 @@ from app.models.transaction import Transaction
 from app.models.transaction_feature import TransactionFeature
 from app.models.fraud_prediction import FraudPrediction
 from app.models.risk_score import RiskScore
-from app.models.fraud_alert import FraudAlert
+from app.models.fraud_alert import FraudAlert, AlertComment
 from app.models.investigation import Investigation
 from app.models.device import Device
 from app.models.beneficiary import Beneficiary
@@ -30,7 +30,7 @@ from app.models.v2_models import (
 
 __all__ = [
     "User", "Customer", "Account", "Transaction", "TransactionFeature",
-    "FraudPrediction", "RiskScore", "FraudAlert", "Investigation",
+    "FraudPrediction", "RiskScore", "FraudAlert", "AlertComment", "Investigation",
     "Device", "Beneficiary", "Merchant", "Location", "IPAddress",
     "FraudNetwork", "NetworkConnection", "ModelVersion", "AuditLog",
     "Notification",

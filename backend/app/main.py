@@ -1,12 +1,13 @@
 """
 FraudLens AI — Main Application Entry Point
-FastAPI application with CORS, WebSocket, and all route mounting.
+FastAPI application with CORS, rate limiting, security headers, WebSocket telemetry, and all route mounting.
 """
 
 import json
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from app.config import settings
 from app.database import engine, Base
 
@@ -20,10 +21,11 @@ from app.api.alerts import router as alerts_router
 from app.api.routes import (
     dashboard_router, customers_router, accounts_router,
     investigations_router, networks_router, analytics_router,
-    reports_router, assistant_router, data_router,
+    reports_router, assistant_router, data_router, audit_router,
 )
 from app.api.v2_routes import router as v2_router
-from app.services.fraud_service import ws_connections
+from app.websocket_manager import ws_manager
+from app.middleware.rate_limiter import SimpleRateLimiterMiddleware
 
 
 @asynccontextmanager
@@ -45,8 +47,13 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    # Clean shutdown of streaming tasks if any
+    try:
+        from app.services.stream_simulator import stop_streaming
+        stop_streaming()
+    except Exception:
+        pass
     print("[INFO] FraudLens AI - Shutting down")
-
 
 
 app = FastAPI(
@@ -55,6 +62,20 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+
+# Security Headers Middleware
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        return response
+
+
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(SimpleRateLimiterMiddleware, max_requests_per_minute=180)
 
 # CORS — local dev + Vercel production + Render preview URLs
 app.add_middleware(
@@ -86,22 +107,29 @@ app.include_router(analytics_router)
 app.include_router(reports_router)
 app.include_router(assistant_router)
 app.include_router(data_router)
+app.include_router(audit_router)
 app.include_router(v2_router)
 
 
-
-# WebSocket endpoint for real-time alerts
+# WebSocket endpoint for real-time telemetry, alerts, and transaction stream
 @app.websocket("/ws/alerts")
-async def websocket_alerts(websocket: WebSocket):
-    await websocket.accept()
-    ws_connections.add(websocket)
+@app.websocket("/ws/stream")
+async def websocket_telemetry(websocket: WebSocket):
+    await ws_manager.connect(websocket)
     try:
         while True:
             data = await websocket.receive_text()
-            # Echo back for keepalive
-            await websocket.send_text(json.dumps({"type": "PONG"}))
+            try:
+                msg = json.loads(data)
+                # Keepalive ping/pong
+                if msg.get("type") == "PING":
+                    await websocket.send_text(json.dumps({"type": "PONG"}))
+            except Exception:
+                await websocket.send_text(json.dumps({"type": "PONG"}))
     except WebSocketDisconnect:
-        ws_connections.discard(websocket)
+        ws_manager.disconnect(websocket)
+    except Exception:
+        ws_manager.disconnect(websocket)
 
 
 @app.get("/")

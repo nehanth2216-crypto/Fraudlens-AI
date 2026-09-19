@@ -25,20 +25,7 @@ from ml.risk_engine import calculate_risk
 from ml.explainability import generate_explanations, get_feature_contributions
 
 
-# WebSocket connections manager
-ws_connections = set()
-
-
-async def broadcast_alert(alert_data: dict):
-    """Broadcast alert to all connected WebSocket clients."""
-    import json
-    dead = set()
-    for ws in ws_connections:
-        try:
-            await ws.send_text(json.dumps(alert_data))
-        except Exception:
-            dead.add(ws)
-    ws_connections -= dead
+from app.websocket_manager import ws_manager
 
 
 def analyze_transaction(db: Session, account_id: int, amount: float,
@@ -220,6 +207,9 @@ def analyze_transaction(db: Session, account_id: int, amount: float,
         db.add(alert)
 
     db.commit()
+
+    if alert_data:
+        ws_manager.broadcast_sync("NEW_ALERT", alert_data)
 
     return {
         "transaction_id": txn_id,

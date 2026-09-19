@@ -61,16 +61,35 @@ export const fraudAPI = {
   highRisk: () => api.get('/fraud/high-risk'),
   statistics: () => api.get('/fraud/statistics'),
   get: (txnId) => api.get(`/fraud/${txnId}`),
+  modelMetadata: () => api.get('/fraud/model-metadata/info'),
+  scoreRealtime: (data) => api.post('/fraud/score-realtime', data),
 };
 
 // Alerts
 export const alertsAPI = {
   list: (params) => api.get('/alerts', { params }),
   get: (id) => api.get(`/alerts/${id}`),
+  create: (data) => api.post('/alerts', data),
   update: (id, data) => api.patch(`/alerts/${id}`, data),
   resolve: (id, data) => api.post(`/alerts/${id}/resolve`, data),
   assign: (id, data) => api.post(`/alerts/${id}/assign`, data),
+  addComment: (id, data) => api.post(`/alerts/${id}/comments`, data),
+  getComments: (id) => api.get(`/alerts/${id}/comments`),
 };
+
+// Real-Time Transaction Stream Simulator
+export const streamAPI = {
+  simulate: (params) => api.post('/transactions/simulate-stream', null, { params }),
+  start: (params) => api.post('/transactions/stream/start', null, { params }),
+  stop: () => api.post('/transactions/stream/stop'),
+  status: () => api.get('/transactions/stream/status'),
+};
+
+// Compliance Audit Logs
+export const auditAPI = {
+  list: (params) => api.get('/audit-logs', { params }),
+};
+
 
 // Customers
 export const customersAPI = {

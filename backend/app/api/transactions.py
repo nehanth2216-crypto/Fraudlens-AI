@@ -179,3 +179,59 @@ def analyze_existing_transaction(txn_id: int, db: Session = Depends(get_db),
         txn.ip_address_id, txn.timestamp,
     )
     return result
+
+
+@router.post("/simulate-stream")
+def simulate_stream_endpoint(
+    count: int = Query(default=5, ge=1, le=50),
+    inject_fraud: bool = Query(default=True),
+    scenario: Optional[str] = Query(default=None),
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_active_user),
+):
+    """
+    Simulate a batch of realistic PaySim / IEEE-CIS transactions.
+    Immediately passes through ML models, updates database, and broadcasts live.
+    """
+    from app.services.stream_simulator import simulate_stream_batch
+    results = simulate_stream_batch(
+        db=db,
+        count=count,
+        inject_fraud=inject_fraud,
+        scenario=scenario,
+        user=user,
+    )
+    return {
+        "message": f"Successfully simulated {len(results)} PaySim transactions",
+        "count": len(results),
+        "transactions": results,
+    }
+
+
+@router.post("/stream/start")
+def start_stream_endpoint(
+    interval: float = Query(default=3.0, ge=1.0, le=30.0),
+    user: User = Depends(get_current_active_user),
+):
+    """Start continuous background transaction streaming."""
+    from app.services.stream_simulator import start_streaming
+    return start_streaming(interval_seconds=interval, user=user)
+
+
+@router.post("/stream/stop")
+def stop_stream_endpoint(
+    user: User = Depends(get_current_active_user),
+):
+    """Stop continuous background transaction streaming."""
+    from app.services.stream_simulator import stop_streaming
+    return stop_streaming(user=user)
+
+
+@router.get("/stream/status")
+def get_stream_status_endpoint(
+    user: User = Depends(get_current_active_user),
+):
+    """Get current status of real-time transaction streaming."""
+    from app.services.stream_simulator import get_stream_status
+    return get_stream_status()
+

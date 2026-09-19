@@ -629,3 +629,48 @@ def list_locations(db: Session = Depends(get_db),
         {"id": l.id, "city": l.city, "state": l.state, "country": l.country}
         for l in locations
     ]
+
+
+# ============================================
+# Audit Logs Router (Compliance & Governance)
+# ============================================
+
+audit_router = APIRouter(prefix="/api/audit-logs", tags=["Audit Logs"])
+
+
+@audit_router.get("")
+def list_audit_logs(
+    action: Optional[str] = None,
+    entity_type: Optional[str] = None,
+    user_id: Optional[int] = None,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_active_user),
+):
+    """Retrieve immutable compliance audit trail with filtering."""
+    query = db.query(AuditLog)
+
+    if action:
+        query = query.filter(AuditLog.action.ilike(f"%{action}%"))
+    if entity_type:
+        query = query.filter(AuditLog.entity_type == entity_type)
+    if user_id:
+        query = query.filter(AuditLog.user_id == user_id)
+
+    logs = query.order_by(desc(AuditLog.timestamp)).limit(limit).all()
+
+    return [
+        {
+            "id": log.id,
+            "user_id": log.user_id,
+            "user_name": log.user_name,
+            "action": log.action,
+            "entity_type": log.entity_type,
+            "entity_id": log.entity_id,
+            "details": log.details,
+            "ip_address": log.ip_address,
+            "timestamp": log.timestamp.isoformat(),
+        }
+        for log in logs
+    ]
+

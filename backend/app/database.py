@@ -52,6 +52,40 @@ class Base(DeclarativeBase):
     pass
 
 
+def run_migrations(eng=None):
+    """Safely apply schema additions to existing SQLite or PostgreSQL database."""
+    target_engine = eng or engine
+    try:
+        with target_engine.connect() as conn:
+            from sqlalchemy import text
+            # For SQLite
+            if "sqlite" in str(target_engine.url):
+                # Check fraud_alerts
+                cols_res = conn.execute(text("PRAGMA table_info(fraud_alerts)")).fetchall()
+                alert_cols = [c[1] for c in cols_res]
+                if alert_cols:
+                    if "resolution" not in alert_cols:
+                        conn.execute(text("ALTER TABLE fraud_alerts ADD COLUMN resolution VARCHAR(100)"))
+                    if "notes" not in alert_cols:
+                        conn.execute(text("ALTER TABLE fraud_alerts ADD COLUMN notes TEXT"))
+
+                # Check audit_logs
+                cols_audit = conn.execute(text("PRAGMA table_info(audit_logs)")).fetchall()
+                audit_cols = [c[1] for c in cols_audit]
+                if audit_cols:
+                    if "user_name" not in audit_cols:
+                        conn.execute(text("ALTER TABLE audit_logs ADD COLUMN user_name VARCHAR(255)"))
+                    if "ip_address" not in audit_cols:
+                        conn.execute(text("ALTER TABLE audit_logs ADD COLUMN ip_address VARCHAR(45)"))
+                conn.commit()
+    except Exception as e:
+        print(f"[WARN] Database migration check: {e}")
+
+
+# Run migrations
+run_migrations(engine)
+
+
 def get_db():
     """Dependency that provides a database session."""
     db = SessionLocal()
@@ -59,3 +93,4 @@ def get_db():
         yield db
     finally:
         db.close()
+

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/layout/Layout';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Pages
 import Login from './pages/Login';
@@ -52,29 +53,31 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/login" element={<Login />} />
 
-      {/* Protected Routes */}
-      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
-      <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
-      
-      {/* V2 Priority Routes */}
-      <Route path="/scam-prevention" element={<ProtectedRoute><ScamPrevention /></ProtectedRoute>} />
-      <Route path="/payment-failures" element={<ProtectedRoute><PaymentFailureDiagnosis /></ProtectedRoute>} />
-      <Route path="/payment-recovery" element={<ProtectedRoute><PaymentRecovery /></ProtectedRoute>} />
-      <Route path="/account-takeover" element={<ProtectedRoute><AccountTakeover /></ProtectedRoute>} />
-      <Route path="/customer-complaints" element={<ProtectedRoute><CustomerComplaints /></ProtectedRoute>} />
-      <Route path="/merchant-health" element={<ProtectedRoute><MerchantHealth /></ProtectedRoute>} />
-      <Route path="/fraud-network" element={<ProtectedRoute><FraudNetwork /></ProtectedRoute>} />
-      <Route path="/explainable-ai" element={<ProtectedRoute><ExplainableAI /></ProtectedRoute>} />
-      <Route path="/copilot" element={<ProtectedRoute><AICopilot /></ProtectedRoute>} />
-      <Route path="/investigations" element={<ProtectedRoute><Investigations /></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+        {/* Protected Routes */}
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
+        <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
+        
+        {/* V2 Priority Routes */}
+        <Route path="/scam-prevention" element={<ProtectedRoute><ScamPrevention /></ProtectedRoute>} />
+        <Route path="/payment-failures" element={<ProtectedRoute><PaymentFailureDiagnosis /></ProtectedRoute>} />
+        <Route path="/payment-recovery" element={<ProtectedRoute><PaymentRecovery /></ProtectedRoute>} />
+        <Route path="/account-takeover" element={<ProtectedRoute><AccountTakeover /></ProtectedRoute>} />
+        <Route path="/customer-complaints" element={<ProtectedRoute><CustomerComplaints /></ProtectedRoute>} />
+        <Route path="/merchant-health" element={<ProtectedRoute><MerchantHealth /></ProtectedRoute>} />
+        <Route path="/fraud-network" element={<ProtectedRoute><FraudNetwork /></ProtectedRoute>} />
+        <Route path="/explainable-ai" element={<ProtectedRoute><ExplainableAI /></ProtectedRoute>} />
+        <Route path="/copilot" element={<ProtectedRoute><AICopilot /></ProtectedRoute>} />
+        <Route path="/investigations" element={<ProtectedRoute><Investigations /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }

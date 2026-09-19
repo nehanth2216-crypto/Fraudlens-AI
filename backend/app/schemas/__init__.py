@@ -284,9 +284,36 @@ class AlertResponse(BaseModel):
     description: Optional[str] = None
     status: str
     assigned_to: Optional[int] = None
+    assignee_name: Optional[str] = None
+    resolution: Optional[str] = None
+    notes: Optional[str] = None
     created_at: datetime
     resolved_at: Optional[datetime] = None
     transaction: Optional[TransactionResponse] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AlertCreate(BaseModel):
+    transaction_id: int
+    alert_type: str = "HIGH_RISK_TRANSACTION"
+    severity: str = "HIGH"
+    title: str = Field(..., min_length=3, max_length=500)
+    description: Optional[str] = None
+
+
+class AlertCommentCreate(BaseModel):
+    comment: str = Field(..., min_length=1, max_length=2000)
+
+
+class AlertCommentResponse(BaseModel):
+    id: int
+    alert_id: int
+    user_id: Optional[int] = None
+    user_name: str
+    comment: str
+    created_at: datetime
 
     class Config:
         from_attributes = True
@@ -296,15 +323,66 @@ class AlertUpdate(BaseModel):
     status: Optional[AlertStatusEnum] = None
     assigned_to: Optional[int] = None
     severity: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class AlertStatusUpdate(BaseModel):
+    status: AlertStatusEnum
+    notes: Optional[str] = None
 
 
 class AlertResolve(BaseModel):
     resolution: str = "Resolved"
     is_false_positive: bool = False
+    notes: Optional[str] = None
 
 
 class AlertAssign(BaseModel):
     user_id: int
+    user_name: Optional[str] = None
+
+
+class AuditLogResponse(BaseModel):
+    id: int
+    user_id: Optional[int] = None
+    user_name: Optional[str] = None
+    action: str
+    entity_type: Optional[str] = None
+    entity_id: Optional[int] = None
+    details: Optional[str] = None
+    ip_address: Optional[str] = None
+    timestamp: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class StreamSimulateRequest(BaseModel):
+    count: int = Field(default=5, ge=1, le=50)
+    inject_fraud: bool = True
+    fraud_scenario: Optional[str] = None  # ATO, VELOCITY, HIGH_AMOUNT, STRUCTURING
+
+
+class StreamStatusResponse(BaseModel):
+    is_streaming: bool
+    interval_seconds: float
+    total_emitted: int
+    fraud_emitted: int
+    last_emitted_at: Optional[datetime] = None
+
+
+class ModelMetadataResponse(BaseModel):
+    model_name: str
+    framework: str
+    algorithm: str
+    feature_names: List[str]
+    anomaly_detector: str
+    risk_formula: str
+    roc_auc: float
+    f1_score: float
+    training_dataset: str
+    total_training_samples: int
+
 
 
 # ============================================

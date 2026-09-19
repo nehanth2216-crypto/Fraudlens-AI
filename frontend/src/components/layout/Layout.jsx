@@ -199,6 +199,17 @@ export default function Layout({ children }) {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full animate-ping" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full" />
             </Link>
+
+            {/* User Profile Chip in Top Bar */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <div className="w-8 h-8 rounded-xl bg-[#002E6E] text-white flex items-center justify-center text-xs font-black shadow-xs">
+                {user?.name?.[0] || 'O'}
+              </div>
+              <div className="hidden sm:block text-left leading-tight">
+                <span className="text-xs font-bold text-[#002E6E] block truncate max-w-[130px]">{user?.name || 'Officer'}</span>
+                <span className="text-[10px] text-slate-500 font-medium">{user?.role || 'FINTECH ADMIN'}</span>
+              </div>
+            </div>
           </div>
         </header>
 

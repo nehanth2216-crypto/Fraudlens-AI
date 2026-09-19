@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, ArrowRight, CheckCircle2, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Login() {
+  const [name, setName] = useState('Sarah Chen');
   const [email, setEmail] = useState('analyst@fraudlens.ai');
   const [password, setPassword] = useState('analyst123');
   const [showPass, setShowPass] = useState(false);
@@ -14,10 +15,14 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name.trim()) {
+      toast.error('Please enter your name');
+      return;
+    }
     setLoading(true);
     try {
-      await login(email, password);
-      toast.success('Welcome to Apex AI');
+      await login(email, password, name.trim());
+      toast.success(`Welcome to Apex AI, ${name.trim()}!`);
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Login failed. Check credentials.');
@@ -26,10 +31,11 @@ export default function Login() {
     }
   };
 
-  const handleQuickLogin = (userEmail, userPass) => {
+  const handleQuickLogin = (userName, userEmail, userPass) => {
+    setName(userName);
     setEmail(userEmail);
     setPassword(userPass);
-    toast.success(`Loaded credentials for ${userEmail}`);
+    toast.success(`Loaded credentials for ${userName}`);
   };
 
   return (
@@ -68,10 +74,28 @@ export default function Login() {
         <div className="bg-white p-7 rounded-2xl border border-slate-200 shadow-xl space-y-5">
           <div>
             <h2 className="text-lg font-bold text-[#002E6E]">Sign In to Portal</h2>
-            <p className="text-xs text-slate-500">Access real-time transaction telemetry & fraud models</p>
+            <p className="text-xs text-slate-500">Enter your name to personalize your risk dashboard</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Officer Full Name</span>
+                <span className="text-[10px] font-normal text-slate-400">Displayed on Dashboard</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name (e.g. Sarah Chen)"
+                  required
+                  className="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 pl-9 text-xs text-slate-900 focus:outline-none focus:border-[#00BAF2] focus:ring-2 focus:ring-[#00BAF2]/20"
+                />
+                <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">Work Email Address</label>
               <input
@@ -119,33 +143,33 @@ export default function Login() {
           {/* Quick Login Helper for Hackathon Judges */}
           <div className="pt-3 border-t border-slate-100">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">1-Click Demo Login</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">1-Click Demo Profiles</span>
               <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" /> Ready
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2 text-[11px]">
               {[
-                { role: 'Fraud Analyst', email: 'analyst@fraudlens.ai', pass: 'analyst123', badge: 'Default' },
-                { role: 'FinTech Admin', email: 'admin@fraudlens.ai', pass: 'admin123', badge: 'Full Access' },
-                { role: 'Investigator', email: 'investigator@fraudlens.ai', pass: 'invest123', badge: 'SAR Hub' },
-                { role: 'Audit Viewer', email: 'viewer@fraudlens.ai', pass: 'viewer123', badge: 'Read Only' },
+                { name: 'Sarah Chen', role: 'Fraud Analyst', email: 'analyst@fraudlens.ai', pass: 'analyst123', badge: 'Default' },
+                { name: 'Alex Morgan', role: 'FinTech Admin', email: 'admin@fraudlens.ai', pass: 'admin123', badge: 'Full Access' },
+                { name: 'Elena Rostova', role: 'Lead Investigator', email: 'investigator@fraudlens.ai', pass: 'invest123', badge: 'SAR Hub' },
+                { name: 'David Kim', role: 'Audit Viewer', email: 'viewer@fraudlens.ai', pass: 'viewer123', badge: 'Read Only' },
               ].map(cred => (
                 <button
                   key={cred.role}
                   type="button"
-                  onClick={() => handleQuickLogin(cred.email, cred.pass)}
+                  onClick={() => handleQuickLogin(cred.name, cred.email, cred.pass)}
                   className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
-                    email === cred.email
+                    name === cred.name
                       ? 'bg-[#E8F7FE] border-[#00BAF2] text-[#002E6E]'
                       : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#002E6E]">{cred.role}</span>
+                    <span className="font-bold text-[#002E6E]">{cred.name}</span>
                     <span className="text-[9px] text-slate-400 font-semibold">{cred.badge}</span>
                   </div>
-                  <span className="block text-[10px] text-slate-500 truncate mt-0.5">{cred.email}</span>
+                  <span className="block text-[10px] text-slate-500 truncate mt-0.5">{cred.role}</span>
                 </button>
               ))}
             </div>

@@ -10,8 +10,21 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (token) {
+      const storedName = localStorage.getItem('fraudlens_user_name');
+      const storedUser = localStorage.getItem('fraudlens_user');
+      let parsedStoredUser = null;
+      try {
+        parsedStoredUser = storedUser ? JSON.parse(storedUser) : null;
+      } catch (e) {}
+
       authAPI.me().then(res => {
-        setUser(res.data);
+        const userData = res.data;
+        if (storedName) {
+          userData.name = storedName;
+        } else if (parsedStoredUser?.name) {
+          userData.name = parsedStoredUser.name;
+        }
+        setUser(userData);
         setLoading(false);
       }).catch(() => {
         logout();
@@ -22,9 +35,13 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
-  const login = async (email, password) => {
+  const login = async (email, password, customName = null) => {
     const res = await authAPI.login({ email, password });
     const { access_token, user: userData } = res.data;
+    if (customName && customName.trim()) {
+      userData.name = customName.trim();
+      localStorage.setItem('fraudlens_user_name', customName.trim());
+    }
     localStorage.setItem('fraudlens_token', access_token);
     localStorage.setItem('fraudlens_user', JSON.stringify(userData));
     setToken(access_token);
@@ -35,6 +52,9 @@ export function AuthProvider({ children }) {
   const register = async (name, email, password, role) => {
     const res = await authAPI.register({ name, email, password, role });
     const { access_token, user: userData } = res.data;
+    if (name && name.trim()) {
+      localStorage.setItem('fraudlens_user_name', name.trim());
+    }
     localStorage.setItem('fraudlens_token', access_token);
     localStorage.setItem('fraudlens_user', JSON.stringify(userData));
     setToken(access_token);
@@ -45,6 +65,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem('fraudlens_token');
     localStorage.removeItem('fraudlens_user');
+    localStorage.removeItem('fraudlens_user_name');
     setToken(null);
     setUser(null);
   };

@@ -10,6 +10,7 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 import { dashboardAPI, v2FailuresAPI, v2RecoveryAPI, v2AtoAPI } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 
 const trendData = [
   { day: 'Mon', legit: 4200, fraud: 38 },
@@ -29,6 +30,7 @@ const failureData = [
 ];
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     totalTransactions: 1200,
     fraudPreventedInr: 14250000,
@@ -81,7 +83,7 @@ export default function Dashboard() {
             Apex AI — Paytm FinTech Command Center
           </h1>
           <p className="text-xs md:text-sm text-blue-100/90 mt-1.5 max-w-2xl leading-relaxed">
-            Real-time financial crime detection, automated UPI failure diagnostics, and intelligent chargeback recovery — making digital finance simpler, faster, and more human.
+            Welcome, <strong className="text-white font-extrabold underline decoration-[#00BAF2] decoration-2 underline-offset-4">{user?.name || 'Officer'}</strong>! Real-time financial crime detection, automated UPI failure diagnostics, and intelligent chargeback recovery — making digital finance simpler, faster, and more human.
           </p>
         </div>
 
@@ -100,6 +102,29 @@ export default function Dashboard() {
             <RefreshCw className="w-4 h-4 text-[#00BAF2]" />
             <span>Smart Retry Engine</span>
           </Link>
+        </div>
+      </div>
+
+      {/* Officer Welcome & Session Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white px-5 py-3.5 rounded-2xl border border-slate-200 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#002E6E] to-[#005CE6] text-white flex items-center justify-center font-black text-sm shadow-xs flex-shrink-0">
+            {user?.name?.[0] || 'O'}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-[#002E6E]">Welcome back, {user?.name || 'Officer'}</span>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                {user?.role || 'AUTHENTICATED'}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500">Security Clearance Level 1 • Connected to Real-Time Telemetry Stream</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-slate-500">
+          <span className="hidden md:inline">Current Officer: <strong className="text-[#002E6E] font-bold">{user?.name || 'Officer'}</strong></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span className="text-emerald-700 font-semibold text-[11px]">Paytm Gateway Online</span>
         </div>
       </div>
 

@@ -9,8 +9,18 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.4-FF6600?style=for-the-badge)](https://xgboost.ai)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://fraudlens-ai-sable.vercel.app)
+[![API Docs](https://img.shields.io/badge/API%20Docs-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://fraudlens-ai-1-pfvy.onrender.com/docs)
 
-> **FraudLens AI V2** is a production-grade, full-stack financial crime intelligence platform featuring real-time ML fraud scoring, multi-hop network graph analysis, explainable AI, and 10 enterprise-grade investigation modules — all in a single, locally runnable application.
+<br/>
+
+### 🌐 [Live Web App: fraudlens-ai-sable.vercel.app](https://fraudlens-ai-sable.vercel.app)
+**Swagger API Docs:** [fraudlens-ai-1-pfvy.onrender.com/docs](https://fraudlens-ai-1-pfvy.onrender.com/docs)  
+**Demo Account:** `admin@fraudlens.ai` &nbsp;|&nbsp; **Password:** `admin123`
+
+---
+
+> **FraudLens AI V2** is a production-grade, full-stack financial crime intelligence platform featuring real-time ML fraud scoring, multi-hop network graph analysis, explainable AI, and 10 enterprise-grade investigation modules.
 
 </div>
 
